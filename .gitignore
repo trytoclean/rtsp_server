@@ -1,4 +1,8 @@
 build/
 temp/
+.cache
+.cache/clangd/index/*
+
+
 .vscode
 .DS_Store
