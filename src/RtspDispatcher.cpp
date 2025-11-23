@@ -1,4 +1,3 @@
-#pragma once
 #include <RtspDispatcher.h>
 RtspDispatcher::RtspDispatcher() {
   handlers_[Method::OPTIONS] = std::make_unique<OptionsHandler>();

@@ -1,51 +1,68 @@
 #include <RtspParser.h>
-
+#include <algorithm>
+#include <sstream>
 #include <stdexcept>
+static inline std::string trim(std::string s) {
+  auto not_space = [](unsigned char c) { return !std::isspace(c); };
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), not_space));
+  s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(), s.end());
+  return s;
+}
+
+static inline std::string tolower_str(std::string s) {
+  for (char &c : s)
+    c = std::tolower((unsigned char)c);
+  return s;
+}
+
 RtspRequest RtspParser::parse(const std::string &data) {
   RtspRequest req;
   size_t pos = 0;
+
+  // 1) request line
   size_t line_end = data.find("\r\n", pos);
-  if (line_end == std::string::npos) {
-    throw std::runtime_error("Invalid RTSP request: no request line");
-  }
-
-  // Parse request line
+  if (line_end == std::string::npos)
+    throw std::runtime_error("no request line");
   std::string request_line = data.substr(pos, line_end - pos);
-  size_t method_end = request_line.find(' ');
-  if (method_end == std::string::npos) {
-    throw std::runtime_error("Invalid RTSP request: no method");
-  }
-  std::string method_str = request_line.substr(0, method_end);
+  request_line = trim(request_line);
+
+  std::istringstream iss(request_line);
+  std::string method_str, uri_str, ver_str;
+  if (!(iss >> method_str >> uri_str >> ver_str))
+    throw std::runtime_error("bad request line");
+
   req.method = stringToMethod(method_str);
+  req.uri = uri_str;
+  req.version = ver_str; // 可校验 RTSP/1.0
 
-  size_t uri_end = request_line.find(' ', method_end + 1);
-  if (uri_end == std::string::npos) {
-    throw std::runtime_error("Invalid RTSP request: no URI");
-  }
-  req.uri = request_line.substr(method_end + 1, uri_end - method_end - 1);
-
-  req.version = request_line.substr(uri_end + 1);
-
-  // Parse headers
+  // 2) headers
   pos = line_end + 2;
   while (true) {
     line_end = data.find("\r\n", pos);
-    if (line_end == std::string::npos || line_end == pos) {
-      break; // End of headers
-    }
+    if (line_end == std::string::npos)
+      break;
+    if (line_end == pos) {
+      pos += 2;
+      break;
+    } // \r\n\r\n end headers
+
     std::string header_line = data.substr(pos, line_end - pos);
-    size_t colon_pos = header_line.find(':');
-    if (colon_pos != std::string::npos) {
-      std::string header_name =
-          header_line.substr(0, colon_pos); // Trim spaces if needed
-      std::string header_value =
-          header_line.substr(colon_pos + 1); // Trim spaces if needed
-      req.headers[header_name] = header_value;
+    size_t colon = header_line.find(':');
+    if (colon != std::string::npos) {
+      std::string name = tolower_str(trim(header_line.substr(0, colon)));
+      std::string value = trim(header_line.substr(colon + 1));
+      req.headers[name] = value; // 若要支持重复 header，改为 vector
     }
     pos = line_end + 2;
   }
 
-  // Body parsing can be added here if needed
+  // 3) body (Content-Length)
+  auto it = req.headers.find("content-length");
+  if (it != req.headers.end()) {
+    int len = std::stoi(it->second);
+    if (pos + len <= data.size())
+      req.body = data.substr(pos, len);
+  }
 
   return req;
 }

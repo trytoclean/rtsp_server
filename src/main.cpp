@@ -2,15 +2,14 @@
 #include <RtspParser.h>
 #include <iostream>
 #include <netinet/in.h>
+#include <ostream>
 #include <sys/socket.h>
 #include <unistd.h>
-void onRtspMessage(const std::string &raw, int client_fd) {}
 
 int main() {
   // socket
   const int port = 8554;
   int server_fd = ::socket(AF_INET, SOCK_STREAM, 0);
-  int reuse = 1;
   sockaddr_in address{};
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
@@ -21,7 +20,7 @@ int main() {
     std::cerr << "bind failed" << std::endl;
     return -1;
   }
-
+  ::listen(server_fd, 255);
   std::cout << "listening on port " << port << std::endl;
   sockaddr_in client_address{};
 
@@ -48,7 +47,7 @@ int main() {
   RtspResponse resp = dispatcher.dispatch(req);
   auto out = resp.serialize();
   ::send(client_fd, out.data(), out.size(), 0);
-  ::close(client_fd);
-  ::close(server_fd);
+  std::cout << "result is " << std::endl;
+  std::cout << resp.serialize() << std::endl;
   return 0;
 }
