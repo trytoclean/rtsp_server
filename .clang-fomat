@@ -1,0 +1,95 @@
+# .clang-format
+# Google C++ Style Guide aligned
+BasedOnStyle: Google
+Language: Cpp
+
+# --- 基础缩进 / 换行 ---
+IndentWidth: 2
+TabWidth: 8
+UseTab: Never
+ContinuationIndentWidth: 4
+BreakBeforeBraces: Attach
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+# --- 行宽 ---
+ColumnLimit: 80
+
+# --- 指针/引用对齐 ---
+PointerAlignment: Left
+ReferenceAlignment: Pointer
+
+# --- include 排序 ---
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '^<.*\.h>'
+    Priority:        1
+  - Regex:           '^<.*>'
+    Priority:        2
+  - Regex:           '^".*"'
+    Priority:        3
+
+# --- 命名空间 ---
+NamespaceIndentation: None
+CompactNamespaces: false
+
+# --- 空格规则 ---
+SpaceBeforeParens: ControlStatements   # if/for/while 前有空格，函数调用不加
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceAfterTemplateKeyword: false
+
+# --- 对齐与排版 ---
+AlignAfterOpenBracket: Align
+AlignOperands: true
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignEscapedNewlines: Left
+AlignTrailingComments: true
+
+# --- 断行策略 ---
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowAllArgumentsOnNextLine: false
+BinPackArguments: true
+BinPackParameters: true
+BreakConstructorInitializers: BeforeComma
+ConstructorInitializerIndentWidth: 4
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: true
+BreakStringLiterals: true
+
+# --- switch/case ---
+IndentCaseLabels: true
+IndentCaseBlocks: false
+
+# --- 注释 ---
+ReflowComments: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+
+# --- 其他细节 ---
+DerivePointerAlignment: false
+FixNamespaceComments: true
+InsertTrailingCommas: None
+Cpp11BracedListStyle: true

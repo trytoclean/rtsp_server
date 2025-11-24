@@ -1,9 +1,10 @@
-#include <RtspDispatcher.h>
-RtspDispatcher::RtspDispatcher() {
+#include "rtsp_server/rtsp/rtsp_dispatcher.h"
+rtsp_server::rtsp::RtspDispatcher::RtspDispatcher() {
   handlers_[Method::OPTIONS] = std::make_unique<OptionsHandler>();
 }
 
-RtspResponse RtspDispatcher::dispatch(const RtspRequest &req) {
+RtspResponse
+rtsp_server::rtsp::RtspDispatcher::dispatch(const RtspRequest &req) {
   auto it = handlers_.find(req.method);
   if (it == handlers_.end()) {
     return RtspResponseBuilder::error(req, 405, "Method Not Allowed");
