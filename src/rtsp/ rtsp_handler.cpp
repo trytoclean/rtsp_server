@@ -1,5 +1,5 @@
-#include "rtsp_server/rtsp/rtsp_handlers.h"
-#include "rtsp_server/rtsp/rtsp_response.h"
+#include "synthesizer/rtsp/rtsp_handlers.h"
+#include "synthesizer/rtsp/rtsp_response.h"
 
 RtspResponse OptionsHandler::handle(const RtspRequest &req) {
   auto resp = RtspResponseBuilder::ok(req);

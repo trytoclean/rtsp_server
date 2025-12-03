@@ -1,5 +1,5 @@
 #pragma once
-#include <rtsp_server/rtsp/rtsp_response.h>
+#include <synthesizer/rtsp/rtsp_response.h>
 class IRtspHandler {
 public:
   virtual ~IRtspHandler() = default;

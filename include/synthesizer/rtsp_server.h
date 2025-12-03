@@ -1,10 +1,10 @@
-// include/rtsp_server/rtsp_server.h
+// include/synthesizer/synthesizer.h
 #pragma once
 #include <cstdint>
 #include <memory>
 #include <string>
 
-namespace rtsp_server {
+namespace synthesizer {
 
 struct ServerConfig {
   std::string bind_ip = "0.0.0.0";
@@ -27,4 +27,4 @@ private:
   std::unique_ptr<Impl> impl_;
 };
 
-} // namespace rtsp_server
+} // namespace synthesizer

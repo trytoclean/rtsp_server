@@ -1,4 +1,4 @@
-#include "rtsp_server/rtsp/rtsp_parser.h"
+#include "synthesizer/rtsp/rtsp_parser.h"
 #include <algorithm>
 #include <sstream>
 #include <stdexcept>

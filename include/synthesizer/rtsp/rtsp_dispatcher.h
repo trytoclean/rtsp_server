@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
-#include <rtsp_server/rtsp/rtsp_handlers.h>
-#include <rtsp_server/rtsp/rtsp_parser.h>
-namespace rtsp_server::rtsp {
+#include <synthesizer/rtsp/rtsp_handlers.h>
+#include <synthesizer/rtsp/rtsp_parser.h>
+namespace synthesizer::rtsp {
 class RtspDispatcher {
 public:
   RtspDispatcher();
@@ -12,4 +12,4 @@ public:
 private:
   std::unordered_map<Method, std::unique_ptr<IRtspHandler>> handlers_;
 };
-} // namespace rtsp_server::rtsp
+} // namespace synthesizer::rtsp

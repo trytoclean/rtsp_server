@@ -1,13 +1,13 @@
-// src/rtsp/rtsp_server.cc
-#include "rtsp_server/rtsp_server.h"
+// src/rtsp/synthesizer.cc
+#include "synthesizer/synthesizer.h"
 
 #include <utility>
 
-#include <rtsp_server/rtsp/rtsp_dispatcher.h>
+#include <synthesizer/rtsp/rtsp_dispatcher.h>
 
-#include "rtsp_server/net/tcp_server.h"
+#include "synthesizer/net/tcp_server.h"
 
-namespace rtsp_server {
+namespace synthesizer {
 
 class RtspServer::Impl {
 public:
@@ -41,4 +41,4 @@ RtspServer::~RtspServer() = default;
 bool RtspServer::start() { return impl_->start(); }
 void RtspServer::stop() { impl_->stop(); }
 
-} // namespace rtsp_server
+} // namespace synthesizer

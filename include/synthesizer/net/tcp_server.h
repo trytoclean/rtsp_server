@@ -1,12 +1,12 @@
-// include/rtsp_server/net/tcp_server.h
+// include/synthesizer/net/tcp_server.h
 #pragma once
 #include <functional>
 #include <memory>
 #include <string>
 
-#include "rtsp_server/net/connection.h"
+#include "synthesizer/net/connection.h"
 
-namespace rtsp_server::net {
+namespace synthesizer::net {
 
 // 上层回调：收到数据时触发
 using OnMessageCallback =
@@ -38,4 +38,4 @@ private:
   OnMessageCallback on_message_;
 };
 
-} // namespace rtsp_server::net
+} // namespace synthesizer::net

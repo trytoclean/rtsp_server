@@ -1,12 +1,12 @@
 // src/main.cc
-#include "rtsp_server/rtsp_server.h"
+#include "synthesizer/synthesizer.h"
 
 int main() {
-  rtsp_server::ServerConfig config;
+  synthesizer::ServerConfig config;
   config.bind_ip = "0.0.0.0";
   config.port = 8554;
 
-  rtsp_server::RtspServer server(config);
+  synthesizer::RtspServer server(config);
   if (!server.start()) {
     return 1;
   }

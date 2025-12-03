@@ -1,8 +1,8 @@
-// include/rtsp_server/net/connection.h
+// include/synthesizer/net/connection.h
 #pragma once
 #include <string>
 
-namespace rtsp_server::net {
+namespace synthesizer::net {
 
 class Connection {
 public:
@@ -25,4 +25,4 @@ private:
   bool closed_ = false;
 };
 
-} // namespace rtsp_server::net
+} // namespace synthesizer::net
