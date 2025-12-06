@@ -1,4 +1,5 @@
-# 注释
+Convention 约定
+## 注释
 -  本项目的所有命名、均符合 google c++ code style 
     (有.clang-tidy)
 - 本项目所有的注释规范是：
@@ -7,7 +8,7 @@
 3. 函数注释（Doxygen 风格）
 4. 实现内注释：只解释“为什么”，不复述代码
 
-## 具体细节
+### 具体细节
 -   头文件注释
 ```cpp
 /**
@@ -59,4 +60,3 @@ RtspResponse dispatch(const RtspRequest& req);
 // RTSP允许header重复出现，这里保留最后一个值，与ffplay行为一致
 headers_[key] = value;
 ```
-

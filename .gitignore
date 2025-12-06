@@ -3,5 +3,6 @@ temp/
 /*.log
 /.cache/
 .vscode
+/doc/private
 
 .DS_Store
