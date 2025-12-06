@@ -1,12 +1,19 @@
 cmake_minimum_required(VERSION 3.20)
+project(Server CXX)
 
-project(Server   
-         CXX )
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_CXX_VERSION 20)
-set(CMAKE_EXTENSION off)
+add_subdirectory(src/net)
+add_subdirectory(src/rtsp)
 
-file(GLOB SOURCE src/*.cpp)
-add_executable(Server ${SOURCE} )
+add_executable(Server src/main.cpp)
+
+target_link_libraries(Server
+    PRIVATE
+        net
+        rtsp
+)
 
 target_include_directories(Server PUBLIC include)
