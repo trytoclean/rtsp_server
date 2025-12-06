@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+
+namespace synthesizer::rtsp {
 enum class Method {
   OPTIONS,
   DESCRIBE,
@@ -33,4 +35,6 @@ public:
 
 private:
   Method stringToMethod(const std::string &method_str);
-}; // synthesizer::rtsp
+  std::string methodToString(Method method);
+};
+} // namespace synthesizer::rtsp

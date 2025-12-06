@@ -1,4 +1,3 @@
 #pragma once
-#include <synthesizer/rtsp/rtsp_handler.h>
 
 namespace synthesizer::rtsp {}
