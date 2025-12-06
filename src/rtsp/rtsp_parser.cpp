@@ -1,6 +1,6 @@
 #include <sstream>
 #include <string>
-#include <synthesizer/rtsp/rtsp_parser.h>
+#include <synthesizer/rtsp/rtsp_parser.hpp>
 namespace synthesizer::rtsp {
 
 static std::string trim(const std::string &s) {

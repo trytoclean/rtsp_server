@@ -2,7 +2,7 @@
 #include <chrono>
 #include <sstream>
 #include <string>
-#include <synthesizer/rtsp/rtsp_parser.h>
+#include <synthesizer/rtsp/rtsp_parser.hpp>
 #include <unordered_map>
 namespace synthesizer::rtsp {
 struct RtspResponse {

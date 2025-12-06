@@ -1,5 +1,5 @@
-#include "synthesizer/rtsp/rtsp_parser.h"
-#include <synthesizer/rtsp/rtsp_response_builder.h>
+#include <synthesizer/rtsp/rtsp_parser.hpp>
+#include <synthesizer/rtsp/rtsp_response_builder.hpp>
 
 namespace synthesizer::rtsp {
 
