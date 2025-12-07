@@ -1,3 +1,5 @@
+#include <sstream>
+#include <string>
 #include <synthesizer/rtsp/rtsp_parser.hpp>
 #include <synthesizer/rtsp/rtsp_response_builder.hpp>
 
@@ -32,6 +34,19 @@ RtspResponse RtspResponseBuilder::buildError(const RtspRequest &req, int code,
   res.headers["Server"] = "Synthesizer-RTSP/0.1";
 
   return res;
+}
+
+std::string RtspResponse::serialize() {
+  std::ostringstream oss;
+  oss << version << std::to_string(code) << reason << "\r\n";
+  for (const auto &kv : headers) {
+    oss << kv.first << ":" << kv.second << "\r\n";
+  }
+  oss << "\r\n";
+
+  oss << body;
+
+  return oss.str();
 }
 
 } // namespace synthesizer::rtsp

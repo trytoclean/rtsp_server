@@ -1,15 +1,24 @@
 #pragma once
-#include <synthesizer/rtsp/handlers/describe_handler.hpp>
-#include <synthesizer/rtsp/handlers/options_handler.hpp>
-#include <synthesizer/rtsp/handlers/pause_handler.hpp>
-#include <synthesizer/rtsp/handlers/play_handler.hpp>
-#include <synthesizer/rtsp/handlers/setup_handler.hpp>
-#include <synthesizer/rtsp/handlers/teardown_handler.hpp>
-#include <synthesizer/rtsp/rtsp_parser.hpp>
+#include "handlers/describe_handler.hpp"
+#include "handlers/options_handler.hpp"
+#include "handlers/pause_handler.hpp"
+#include "handlers/play_handler.hpp"
+#include "handlers/setup_handler.hpp"
+#include "handlers/teardown_handler.hpp"
+#include "rtsp_parser.hpp"
+#include <memory>
 
 namespace synthesizer::rtsp {
-class Dispatcher {
+class RtspDispatcher {
 public:
-  RtspResponse disaptcher(const RtspRequest &request);
+  RtspDispatcher();
+
+  RtspResponse dispatch(const RtspRequest &req);
+
+  ~RtspDispatcher();
+
+private:
+  std::unordered_map<Method, std::unique_ptr<IRtspHandler>> handlers;
 };
+
 } // namespace synthesizer::rtsp

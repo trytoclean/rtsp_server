@@ -3,10 +3,7 @@
 
 namespace synthesizer::net {
 
-Epoll::Epoll(int maxEvent) {
-  epollFd_ = epoll_create1(0);
-  epoll_event events[maxEvent];
-}
+Epoll::Epoll(int maxEvent) {}
 
 bool Epoll::add(int fd, uint32_t events) {
   epoll_event ev{};

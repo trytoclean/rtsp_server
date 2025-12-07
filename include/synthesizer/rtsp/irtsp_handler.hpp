@@ -1,5 +1,5 @@
 #pragma once
-#include <synthesizer/rtsp/rtsp_response_builder.hpp>
+#include "rtsp_response_builder.hpp"
 namespace synthesizer::rtsp {
 class IRtspHandler {
 public:

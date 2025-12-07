@@ -1,5 +1,5 @@
 #pragma once
-#include <synthesizer/net/inet_address.hpp>
+#include "inet_address.hpp"
 #include <sys/socket.h>
 namespace synthesizer::net {
 
