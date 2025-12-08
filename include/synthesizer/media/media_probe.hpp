@@ -7,6 +7,7 @@ namespace synthesizer::media {
 
 class MediaProbe {
 public:
+  AVFormatContext av;
 };
 
 } // namespace synthesizer::media
