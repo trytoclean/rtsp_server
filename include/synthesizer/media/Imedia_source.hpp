@@ -27,7 +27,7 @@ struct TrackInfo {
 struct MediaInfo {
   std::string format;            // 容器格式，如 mp4, flv
   std::vector<TrackInfo> tracks; // 所有轨道的元信息
-  bool is_live;                  // 是否为直播源
+  // bool is_live;                  // 是否为直播源
 };
 
 class IMediaSource {

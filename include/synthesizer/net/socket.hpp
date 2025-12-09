@@ -1,18 +1,22 @@
 #pragma once
 #include "inet_address.hpp"
-#include <sys/socket.h>
+
 namespace synthesizer::net {
 
 class Socket {
 public:
-  explicit Socket();
+  Socket();                // 创建 socket(AF_INET, SOCK_STREAM)
+  explicit Socket(int fd); // 接受 accept() 返回的 fd
   ~Socket();
-  void bindSocket(InetAddress *addr_);
-  void listenSocket(int listen_queue_len = 10);
+
+  int fd() const { return fd_; }
+
+  void bindSocket(const InetAddress &addr);
+  void listenSocket(int backlog = 1024);
+  void setNonBlocking();
 
 private:
-  InetAddress addr_;
-  int fd;
+  int fd_{-1};
 };
 
 } // namespace synthesizer::net

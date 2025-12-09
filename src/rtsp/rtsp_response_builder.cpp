@@ -11,7 +11,7 @@ RtspResponse RtspResponseBuilder::buildSuccess(const RtspRequest &req) {
   res.code = 200;
   res.reason = "OK";
   res.version = req.version;
-
+  res.setHeader("Cseq", std::to_string(req.cseq));
   res.headers["CSeq"] = std::to_string(req.cseq);
   res.headers["Date"] = get_time();
   res.headers["Server"] = "Synthesizer-RTSP/0.1";
@@ -48,5 +48,21 @@ std::string RtspResponse::serialize() {
 
   return oss.str();
 }
+void RtspResponse::setHeader(const std::string &key, const std::string &value) {
+  if (value.find('\r') != std::string::npos ||
+      value.find('\n') != std::string::npos) {
+    throw std::invalid_argument("Header value must not contain CR/LF");
+  }
+  headers[str_tolower(key)] = value;
+}
 
+void RtspResponse::appendHeader(const std::string &key,
+                                const std::string &value) {
+
+  if (headers.count(key) == 0) {
+    headers[key] = value;
+  } else {
+    headers[key] += "," + value;
+  }
+}
 } // namespace synthesizer::rtsp

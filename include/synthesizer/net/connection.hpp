@@ -1,40 +1,42 @@
 #pragma once
 #include "buffer.hpp"
 #include <functional>
-#include <memory>
+
 namespace synthesizer::net {
 
-class Epoll;
+class Epoll; // 前置声明
 
-class Connection : public std::enable_shared_from_this<Connection> {
+class Connection {
 public:
-  Connection(int fd, Epoll *loop);
+  using MessageCallback =
+      std::function<void(Connection *, const std::string &)>;
+  using CloseCallback = std::function<void(Connection *)>;
+
+  Connection(int fd, Epoll *ep);
   ~Connection();
 
-  void onReadable();
-  void onWritable();
+  int fd() const { return fd_; }
+
+  void onReadable(); // EPOLLIN
+  void onWritable(); // EPOLLOUT
+  void send(const std::string &data);
   void close();
 
-  // 业务层调用，用于发送响应
-  void send(const std::string &data);
-
-  // 设置回调（Parser / Dispatcher）
-  void setMessageCallback(std::function<void(Connection *, Buffer &)> cb);
-  void setCloseCallback(std::function<void(Connection *)> cb);
+  void setMessageCallback(MessageCallback cb) { msg_cb_ = std::move(cb); }
+  void setCloseCallback(CloseCallback cb) { close_cb_ = std::move(cb); }
 
 private:
-  int fd;
-  bool closed{false};
+  void enableWriting();
+  void disableWriting();
 
-  Buffer input;
-  Buffer output;
+private:
+  int fd_;
+  Epoll *epoll_;  // 用于修改监听事件
+  Buffer input_;  // 收到的数据
+  Buffer output_; // 等待发送的数据
 
-  Epoll *loop;
-
-  std::function<void(Connection *, Buffer &)> messageCallback;
-  std::function<void(Connection *)> closeCallback;
-
-  void handleError();
+  MessageCallback msg_cb_;
+  CloseCallback close_cb_;
 };
 
 } // namespace synthesizer::net

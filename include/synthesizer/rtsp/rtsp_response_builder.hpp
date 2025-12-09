@@ -1,5 +1,6 @@
 #pragma once
 #include "rtsp_parser.hpp"
+#include <cctype>
 #include <chrono>
 #include <sstream>
 #include <string>
@@ -12,6 +13,9 @@ struct RtspResponse {
   std::unordered_map<std::string, std::string> headers;
   std::string body;
   std::string serialize();
+  void setHeader(const std::string &key, const std::string &value);
+  // for transport
+  void appendHeader(const std::string &key, const std::string &value);
 };
 
 class RtspResponseBuilder {
@@ -34,5 +38,10 @@ inline std::string get_time() {
       << tm.tm_min << ":" << tm.tm_sec << "GMT";
 
   return oss.str();
+}
+inline std::string str_tolower(std::string s) {
+  std::transform(s.begin(), s.end(), s.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  return s;
 }
 } // namespace synthesizer::rtsp

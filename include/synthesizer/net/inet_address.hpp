@@ -8,6 +8,8 @@ class InetAddress {
 public:
   InetAddress();
   InetAddress(const char *ip, int port);
+  InetAddress(int port);
+
   ~InetAddress();
   socklen_t size() const { return sizeof(addr_); }
   sockaddr_in addr_{};
