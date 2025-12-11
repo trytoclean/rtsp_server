@@ -4,5 +4,6 @@ temp/
 /.cache/
 .vscode
 /doc/private
-
+#test for media
+/input
 .DS_Store
