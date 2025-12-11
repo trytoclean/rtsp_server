@@ -1,6 +1,6 @@
 #pragma once
+#include "media_metadata.hpp"
 #include <string>
-#include <synthesizer/media/Imedia_source.hpp>
 
 namespace synthesizer::media {
 

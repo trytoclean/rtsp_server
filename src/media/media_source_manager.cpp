@@ -1,38 +1,115 @@
 #include <filesystem>
+#include <iostream>
+
 #include <synthesizer/media/media_source_manager.hpp>
+#include <synthesizer/media/source/file_source.hpp>
+
+namespace fs = std::filesystem;
+
 namespace synthesizer::media {
 
-static std::string extractPath(const std::string &uri) {
-  auto pos = uri.find("://");
-  if (pos == std::string::npos) {
-    return uri; // "/test.mp4"
+MediaSourceManager::MediaSourceManager(std::string mediaRootDir)
+    : mediaRootDir_(std::move(mediaRootDir)) {}
+
+// 扫描本地目录并注册
+void MediaSourceManager::scanAndRegisterLocalFiles() {
+  if (!fs::exists(mediaRootDir_)) {
+    std::cerr << "[MediaSourceManager] mediaRootDir not exists: "
+              << mediaRootDir_ << "\n";
+    return;
   }
-  auto slash = uri.find('/', pos + 3);
-  if (slash == std::string::npos) {
-    throw std::invalid_argument("invalid RTSP uri");
+
+  for (auto &entry : fs::directory_iterator(mediaRootDir_)) {
+    if (!entry.is_regular_file())
+      continue;
+
+    auto path = entry.path().string();
+    auto filename = entry.path().filename().string();
+
+    MediaSourceConfig cfg;
+    cfg.id = filename; // MVP：id 使用文件名
+    cfg.filePath = path;
+
+    registerSource(cfg);
   }
-  return uri.substr(slash);
 }
 
-MediaSourceManager::MediaSourceManager(std::string root)
-    : root_(std::move(root)) {}
+bool MediaSourceManager::registerSource(const MediaSourceConfig &config) {
+  auto it = registryById_.find(config.id);
+  if (it != registryById_.end())
+    return false;
 
-std::string MediaSourceManager::resolve(const std::string &uri) {
-  auto it = mapCache_.find(uri);
-  if (it != mapCache_.end()) {
+  registryById_[config.id] = config;
+  return true;
+}
+
+bool MediaSourceManager::unregisterSource(const std::string &id) {
+  auto it = registryById_.find(id);
+  if (it == registryById_.end())
+    return false;
+
+  registryById_.erase(it);
+  activeSources_.erase(id);
+  return true;
+}
+
+// MVP：解析 URL 最简单写法：rtsp://host:port/filename
+std::optional<MediaSourceConfig>
+MediaSourceManager::resolveSourceConfig(const std::string &url) {
+  // 找最后一个 "/"
+  auto pos = url.rfind('/');
+  if (pos == std::string::npos)
+    return std::nullopt;
+
+  std::string file = url.substr(pos + 1);
+
+  auto it = registryById_.find(file);
+  if (it == registryById_.end())
+    return std::nullopt;
+
+  return it->second;
+}
+
+bool MediaSourceManager::hasSource(const std::string &url) {
+  return resolveSourceConfig(url).has_value();
+}
+
+std::shared_ptr<IMediaSource>
+MediaSourceManager::acquireSource(const std::string &url) {
+  auto cfgOpt = resolveSourceConfig(url);
+  if (!cfgOpt.has_value())
+    return nullptr;
+
+  const std::string &id = cfgOpt->id;
+
+  // 若已存在活跃实例则直接复用
+  auto it = activeSources_.find(id);
+  if (it != activeSources_.end())
     return it->second;
+
+  // 创建实例（MVP 使用 FileSource）
+  std::shared_ptr<IMediaSource> src = std::make_shared<FileSource>(*cfgOpt);
+  if (!src->open()) {
+    std::cerr << "[MediaSourceManager] acquireSource open failed: " << id
+              << "\n";
+    return nullptr;
   }
 
-  std::string pathPart = extractPath(uri);
-  std::string real = root_ + pathPart;
-
-  mapCache_[uri] = real;
-  return real;
+  activeSources_[id] = src;
+  return src;
 }
 
-bool MediaSourceManager::exists(const std::string &uri) {
-  auto real = resolve(uri);
-  return std::filesystem::exists(real);
-}
+void MediaSourceManager::releaseSource(const std::string &url) {
+  auto cfgOpt = resolveSourceConfig(url);
+  if (!cfgOpt.has_value())
+    return;
 
+  const std::string &id = cfgOpt->id;
+
+  auto it = activeSources_.find(id);
+  if (it != activeSources_.end()) {
+    it->second->close();
+    activeSources_.erase(it);
+  }
+}
 } // namespace synthesizer::media
