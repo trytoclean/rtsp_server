@@ -12,9 +12,8 @@ RtspResponse RtspResponseBuilder::buildSuccess(const RtspRequest &req) {
   res.reason = "OK";
   res.version = req.version;
   res.setHeader("Cseq", std::to_string(req.cseq));
-  res.headers["CSeq"] = std::to_string(req.cseq);
-  res.headers["Date"] = get_time();
-  res.headers["Server"] = "Synthesizer-RTSP/0.1";
+  res.setHeader("Date", get_time());
+  res.setHeader("Server", "Synthesizer-RTSP/0.1");
   // Handler 自行补充它们自己的字段如:
   // Public, Session, Transport, Content-Type, Content-Length ...
 

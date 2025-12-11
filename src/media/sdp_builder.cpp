@@ -77,3 +77,30 @@ std::string SDPBuilder::buildAudioAAC(const TrackInfo &track,
 }
 
 } // namespace synthesizer::media
+
+/* sdp in real
+Session Description Protocol
+    Session Description Protocol Version (v): 0
+    Owner/Creator, Session Id (o): - 1758013524560723 1 IN IP4 192.168.239.129
+    Session Name (s): Matroska video+audio+(optional)subtitles, streamed by the
+LIVE555 Media Server Session Information (i): test.mkv Time Description, active
+time (t): 0 0 Session Attribute (a): tool:LIVE555 Streaming Media v2025.07.19
+    Session Attribute (a): type:broadcast
+    Session Attribute (a): control:*
+    Session Attribute (a): range:npt=0-201.915
+    Session Attribute (a): x-qt-text-nam:Matroska
+video+audio+(optional)subtitles, streamed by the LIVE555 Media Server Session
+Attribute (a): x-qt-text-inf:test.mkv Media Description, name and address (m):
+video 0 RTP/AVP 96 Connection Information (c): IN IP4 0.0.0.0 Bandwidth
+Information (b): AS:500 Media Attribute (a): rtpmap:96 H264/90000 Media
+Attribute (a): fmtp:96
+packetization-mode=1;profile-level-id=64001F;sprop-parameter-sets=Z2QAH6zZQNg95+EAAAMAAQAAAwA8Dxgxlg==,aOvjyyLA
+    Media Attribute (a): control:track1
+    Media Description, name and address (m): audio 0 RTP/AVP 97
+    Connection Information (c): IN IP4 0.0.0.0
+    Bandwidth Information (b): AS:112
+    Media Attribute (a): rtpmap:97 VORBIS/48000/2
+    Media Attribute (a) […]: fmtp:97
+
+
+*/
