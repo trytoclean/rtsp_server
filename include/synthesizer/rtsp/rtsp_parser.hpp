@@ -34,7 +34,7 @@ public:
   RtspRequest parse(const std::string &raw);
 
 private:
-  Method stringToMethod(const std::string &method_str);
-  std::string methodToString(Method method);
+  Method string_to_method(const std::string &method_str);
+  std::string method_to_string(Method method);
 };
 } // namespace synthesizer::rtsp

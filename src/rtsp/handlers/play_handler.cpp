@@ -2,6 +2,7 @@
 #include <synthesizer/rtsp/rtsp_response_builder.hpp>
 
 namespace synthesizer::rtsp {
+
 RtspResponse handle(const RtspRequest &req) {
   RtspResponse res = RtspResponseBuilder::buildSuccess(req);
   res.headers["Public"] = "OPTIONS, DESCRIBE, SETUP, PLAY, PAUSE, TEARDOWN";

@@ -11,7 +11,7 @@ static std::string trim(const std::string &s) {
   return s.substr(start, end - start + 1);
 }
 
-Method stringToMethod(const std::string &s) {
+Method string_to_method(const std::string &s) {
   if (s == "OPTIONS")
     return Method::OPTIONS;
   if (s == "DESCRIBE")
@@ -51,7 +51,7 @@ RtspRequest RtspParser::parse(const std::string &raw) {
     std::string method_str;
     ls >> method_str >> req.uri >> req.version;
 
-    req.method = stringToMethod(method_str);
+    req.method = string_to_method(method_str);
   }
 
   // Step 3. 解析Headers（直到遇到空行）

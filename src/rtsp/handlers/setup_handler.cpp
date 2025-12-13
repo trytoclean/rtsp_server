@@ -1,14 +1,49 @@
+#include <cstdlib>
+#include <cstring>
 #include <synthesizer/rtsp/handlers/setup_handler.hpp>
-#include <synthesizer/rtsp/rtsp_response_builder.hpp>
 
 namespace synthesizer::rtsp {
-RtspResponse handle(const RtspRequest &req) {
-  RtspResponse res = RtspResponseBuilder::buildSuccess(req);
-  res.headers["Public"] = "OPTIONS, DESCRIBE, SETUP, PLAY, PAUSE, TEARDOWN";
-  res.headers["Content-Type"] = "application/sdp";
-  res.headers["Content-Length"] = std::to_string(res.body.size());
-  return res;
+
+RtspResponse SetupHandler::handle(const RtspRequest &req) {
+  RtspResponse resp = RtspResponseBuilder::buildSuccess(req);
+
+  // 1. 解析 Transport 请求头
+  std::string transport = req.transport;
+  // MVP：简单解析 client_port=xxxx-yyyy
+  int pos = transport.find("client_port=");
+  int c1 = 0, c2 = 0;
+  if (pos != std::string::npos) {
+    pos += std::strlen("client_port=");
+    int dash = transport.find("-", pos);
+    c1 = std::stoi(transport.substr(pos, dash - pos));
+    int end = transport.find(";", dash);
+    c2 = std::stoi(transport.substr(dash + 1, end - dash - 1));
+  }
+
+  // 2. server port
+  int serverRtpPort = 6970;
+  int serverRtcpPort = 6971;
+
+  // 3. 服务端 IP（先写死）
+  std::string serverIp = "192.168.239.129";
+
+  // 4. 构建 Transport 响应
+  std::string transportResp = "RTP/AVP;unicast;"
+                              "client_port=" +
+                              std::to_string(c1) + "-" + std::to_string(c2) +
+                              ";server_port=" + std::to_string(serverRtpPort) +
+                              "-" + std::to_string(serverRtcpPort) +
+                              ";source=" + serverIp;
+
+  resp.setHeader("Transport", transportResp);
+
+  // 5. 生成 Session ID
+  std::string sessionId = generateSessionId();
+  resp.setHeader("Session", sessionId + ";timeout=60");
+
+  return resp;
 }
+
 } // namespace synthesizer::rtsp
 
 /*reply
