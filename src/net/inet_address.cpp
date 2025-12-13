@@ -10,14 +10,12 @@ public:
   InetAddress() = default;
 
   InetAddress(const char *ip, int port) {
-    std::memset(&addr_, 0, sizeof(addr_));
     addr_.sin_family = AF_INET;
     addr_.sin_port = htons(port);
     inet_pton(AF_INET, ip, &addr_.sin_addr);
   }
 
-  explicit InetAddress(int port) { // 用于绑定 0.0.0.0
-    std::memset(&addr_, 0, sizeof(addr_));
+  explicit InetAddress(int port) {
     addr_.sin_family = AF_INET;
     addr_.sin_addr.s_addr = INADDR_ANY;
     addr_.sin_port = htons(port);

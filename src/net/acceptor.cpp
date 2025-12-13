@@ -1,4 +1,3 @@
-#include "synthesizer/net/inet_address.hpp"
 #include <fcntl.h>
 #include <synthesizer/net/acceptor.hpp>
 #include <synthesizer/net/socket.hpp>

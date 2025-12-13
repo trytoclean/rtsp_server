@@ -1,3 +1,17 @@
+/**
+ * @file epoll.hpp
+ * @brief RTSP请求分发器：根据 Method 路由到对应 Handler
+ *
+ * 职责边界：
+ * 1) 不做业务决策，只做路由
+ * 2) 不持有 socket / 不做网络 I/O
+ *
+ * 典型调用：
+ *   RtspResponse res = dispatcher.dispatch(req);
+ *
+ * @author trytoclean
+ * @date 2025-11-23
+ */
 #pragma once
 #include <cstdint>
 #include <sys/epoll.h>
